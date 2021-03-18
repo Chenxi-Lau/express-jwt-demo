@@ -1,7 +1,7 @@
 <!--
  * @Author: 刘晨曦
  * @Date: 2021-03-18 10:04:42
- * @LastEditTime: 2021-03-18 16:09:40
+ * @LastEditTime: 2021-03-18 16:22:41
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \node-jwt-demo\express-based\README.md
@@ -10,6 +10,7 @@
 # 基于 Express.js 的 JWT 鉴权方案的实践
 
 > 方案：Express.js + Mysql2 + sequelize
+
 > Github 项目地址：https://github.com/Chenxi-Lau/express-jwt-demo
 
 关于 JWT 鉴权方案的介绍：
@@ -17,65 +18,45 @@ https://chenxi-lau.github.io/docsify-based-wiki/#/project/json-web-token
 
 ## 1. 生成 Express.js 项目
 
-安装生成工具
-
 ```npm
+安装生成工具
 npm install express-generator -g
-```
 
 生成项目
-
-```npm
 express express-jwt-demo
-```
 
 进入项目
-
-```npm
 cd express-jwt-demo
-```
 
 安装依赖
-
-````npm
 npm install
-```
 
 运行项目
-
-```npm
 npm start
-````
+```
 
 ## 2. 和数据库建立连接
 
-启动 mysql
-
 ```cmd
+启动 mysql
 net start mysql
-```
 
 登录数据库
-
-```cmd
 mysql -u root -p
-```
 
 执行 SQL 文件
-
-```cmd
 source C:\Desktop\jwt_demo.sql （你的sql文件的路径）
 ```
 
-这时，数据库里面就有一个名为 jwt_demo 的表，表中有一条测试数据
+这时，数据库里面就有一个名为 jwt_demo 的表，表中有一条测试数据，
 
 | userId            | userName | password                         |
 | ----------------- | -------- | -------------------------------- |
 | 99170219708121088 | admin    | e10adc3949ba59abbe56e057f20f883e |
 
-表中数据的 password 是采用[crypto.js](https://www.npmjs.com/package/crypto-js)中间件 md5 加密后存储的密码，未加密之前的密码为 **123456**
+表中数据 password 是采用[crypto.js](https://www.npmjs.com/package/crypto-js)中间件 md5 加密后存储的密码，未加密之前的密码为 **123456**。
 
-在 Express.js 中，我们可以采用两个中间件 [sequelize](https://www.npmjs.com/package/sequelize) 与 [mysql2](https://www.npmjs.com/package/mysql2)与数据库建立连接，并将关系数据库的表结构映射到对象上。安装相关依赖
+接着，我们可以采用两个中间件 [sequelize](https://www.npmjs.com/package/sequelize) 与 [mysql2](https://www.npmjs.com/package/mysql2)与数据库建立连接，并将关系数据库的表结构映射到对象上。安装相关依赖，
 
 ```npm
 npm install sequelize mysql2
@@ -244,7 +225,7 @@ JWT 方案中，当用户登录成功后，会将/login 接口返回的 token �
 
 ![image-20210317203000297](file://C:/Users/liuchenxi/AppData/Roaming/Typora/typora-user-images/image-20210317203000297.png?lastModify=1616055077)
 
-因此，我们还需要对下次请求携带的 token 进行校验，这里可以采用[express-jwt](https://www.npmjs.com/package/express-jwt)中间件进行校验，对异常的错误信息（401错误）进行捕获。
+因此，我们还需要对下次请求携带的 token 进行校验，这里可以采用[express-jwt](https://www.npmjs.com/package/express-jwt)中间件进行校验，对异常的错误信息（401 错误）进行捕获。
 
 app.js
 
