@@ -1,7 +1,7 @@
 <!--
  * @Author: 刘晨曦
  * @Date: 2021-03-18 10:04:42
- * @LastEditTime: 2021-03-18 16:37:13
+ * @LastEditTime: 2021-03-18 16:41:19
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \node-jwt-demo\express-based\README.md
@@ -283,7 +283,9 @@ app.use(function(err, req, res, next) {
 
 ## 5. 方案验证
 
-我暂时没有提供客户端的实现，这里直接采用 postman 测试一下功能。首先，进行登录验证 /users/login?userName=admin&password=123456，正确的返回值为:
+暂时没有提供客户端的实现，这里直接采用 postman 测试一下功能。
+
+首先，进行登录验证 /users/login?userName=admin&password=123456，正确的返回值为:
 
 ```json
 {
@@ -332,3 +334,8 @@ app.use(function(err, req, res, next) {
   }
 }
 ```
+
+## References
+
+1. [使用 Sequelize](https://www.liaoxuefeng.com/wiki/1022910821149312/1101571555324224)
+2. [使用 koa2 实现一个简单 JWT 鉴权](https://www.jianshu.com/p/34cc51f4ad51)
