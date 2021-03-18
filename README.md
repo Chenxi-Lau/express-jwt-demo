@@ -1,7 +1,7 @@
 <!--
  * @Author: 刘晨曦
  * @Date: 2021-03-18 10:04:42
- * @LastEditTime: 2021-03-18 16:33:51
+ * @LastEditTime: 2021-03-18 16:37:13
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \node-jwt-demo\express-based\README.md
@@ -223,7 +223,7 @@ module.exports = {
 
 JWT 方案中，当用户登录成功后，会将/login 接口返回的 token 存储在本地缓存中，在下次需要在 headers 中，服务端要对携带的 token 进行解析，解析成功会返回被加密的信息。其流程如下所示：
 
-![image-20210317203000297](https://github.com/Chenxi-Lau/express-jwt-demo/blob/master/public/images/jwt.png)
+![img](https://github.com/Chenxi-Lau/express-jwt-demo/blob/master/public/images/jwt.png)
 
 因此，我们还需要对下次请求携带的 token 进行校验，这里可以采用[express-jwt](https://www.npmjs.com/package/express-jwt)中间件进行校验，对异常的错误信息（401 错误）进行捕获。
 
