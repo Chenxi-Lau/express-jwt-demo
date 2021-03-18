@@ -1,20 +1,21 @@
 <!--
  * @Author: 刘晨曦
  * @Date: 2021-03-18 10:04:42
- * @LastEditTime: 2021-03-18 15:27:27
+ * @LastEditTime: 2021-03-18 16:09:40
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \node-jwt-demo\express-based\README.md
 -->
 
-# 基于 Express.js 的 json-web-token 生成方案的实践
+# 基于 Express.js 的 JWT 鉴权方案的实践
 
-> Github 项目地址：
+> 方案：Express.js + Mysql2 + sequelize
+> Github 项目地址：https://github.com/Chenxi-Lau/express-jwt-demo
 
 关于 JWT 鉴权方案的介绍：
 https://chenxi-lau.github.io/docsify-based-wiki/#/project/json-web-token
 
-## 1. 新建 Express.js 项目
+## 1. 生成 Express.js 项目
 
 安装生成工具
 
@@ -25,13 +26,13 @@ npm install express-generator -g
 生成项目
 
 ```npm
-express express-based
+express express-jwt-demo
 ```
 
 进入项目
 
 ```npm
-cd express-based
+cd express-jwt-demo
 ```
 
 安装依赖
@@ -45,8 +46,6 @@ npm install
 ```npm
 npm start
 ````
-
-或者 clone 本项目
 
 ## 2. 和数据库建立连接
 
@@ -76,9 +75,7 @@ source C:\Desktop\jwt_demo.sql （你的sql文件的路径）
 
 表中数据的 password 是采用[crypto.js](https://www.npmjs.com/package/crypto-js)中间件 md5 加密后存储的密码，未加密之前的密码为 **123456**
 
-在 Express.js 中，我们可以采用两个中间件 [sequelize](https://www.npmjs.com/package/sequelize) 与 [mysql2](https://www.npmjs.com/package/mysql2)与数据库建立连接，并将关系数据库的表结构映射到对象上。
-
-安装相关依赖
+在 Express.js 中，我们可以采用两个中间件 [sequelize](https://www.npmjs.com/package/sequelize) 与 [mysql2](https://www.npmjs.com/package/mysql2)与数据库建立连接，并将关系数据库的表结构映射到对象上。安装相关依赖
 
 ```npm
 npm install sequelize mysql2
@@ -108,7 +105,7 @@ const sequelize = new Sequelize(config.database, config.username, config.passwor
 module.exports = sequelize
 ```
 
-在主目录新建 models 文件夹及 users.js，将关系数据库的表结构映射到对象上，
+主目录下新建 models/users.js，通过 define()将数据库的表结构映射到对象上，
 
 ```javascript
 const db = require('../db.config.js')
@@ -141,6 +138,7 @@ const tokens = require('../utils/tokens')
 const usersModel = require('../models/users')
 // User Login
 router.post('/login', async function(req, res, next) {
+  // post 请求是放在 req.query 里面的
   const params = req.query
   if (!params.userName || !params.password) {
     return res.json({
@@ -149,7 +147,7 @@ router.post('/login', async function(req, res, next) {
       data: [],
     })
   }
-  // 数据库查找用户是否存在
+  // 从数据库查找用户是否存在
   const result = await usersModel.findAll({
     where: {
       userName: params.userName,
@@ -236,14 +234,17 @@ module.exports = {
 }
 ```
 
-因为 users.js 里面的路由已经挂载至 app.js 中了，所以不需要再次挂载，这时候访问 http://localhost:3000/users/login?userName=admin&password=123456 是可以拿到用户数据的。
+因为 routes/users.js 里面的路由已经挂载至 app.js 中了，所以不需要手动挂载，这时候访问 /users/login?userName=admin&password=123456 是可以拿到用户数据的。
 
-但是，我们还没做 token 校验的相关处理，http://localhost:3000/users/getUser 接口是拿不到用户数据的。
+但是，此时我们还没有做 token 校验的相关处理，/users/getUser 接口是拿不到用户数据的。
 
 ## 4. Token 的解析与校验
 
-当用户登录成功后，会将/login 接口返回的 token 存储在本地缓存中，在下次需要在 headers 中，服务端要对携带的 token 进行解析，解析成功会返回被加密的信息。
-同时，我们还需要对 token 的进行校验，我们采用[express-jwt](https://www.npmjs.com/package/express-jwt)中间件，并对异常的错误信息进行捕获。
+JWT 方案中，当用户登录成功后，会将/login 接口返回的 token 存储在本地缓存中，在下次需要在 headers 中，服务端要对携带的 token 进行解析，解析成功会返回被加密的信息。其流程如下所示：
+
+![image-20210317203000297](file://C:/Users/liuchenxi/AppData/Roaming/Typora/typora-user-images/image-20210317203000297.png?lastModify=1616055077)
+
+因此，我们还需要对下次请求携带的 token 进行校验，这里可以采用[express-jwt](https://www.npmjs.com/package/express-jwt)中间件进行校验，对异常的错误信息（401错误）进行捕获。
 
 app.js
 
@@ -274,7 +275,7 @@ app.use(
     secret: 'liuchenxi0428',
     algorithms: ['HS256'],
   }).unless({
-    path: ['/', '/users/'],
+    path: ['/', '/users/', '/users/login'],
   })
 )
 
@@ -301,7 +302,7 @@ app.use(function(err, req, res, next) {
 
 ## 5. 方案验证
 
-我们没写客户端，直接采用 postman 测试一下，/users/login?userName=admin&password=123456，返回值:
+我暂时没有提供客户端的实现，这里直接采用 postman 测试一下功能。首先，进行登录验证 /users/login?userName=admin&password=123456，正确的返回值为:
 
 ```json
 {
@@ -318,7 +319,7 @@ app.use(function(err, req, res, next) {
 }
 ```
 
-验证 /users/getUser 接口，未携带 Token 的情况下：
+接着，验证 /users/getUser 接口，在未携带 Token 的情况下：
 
 ```json
 {
