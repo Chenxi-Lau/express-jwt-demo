@@ -1,7 +1,7 @@
 <!--
  * @Author: 刘晨曦
  * @Date: 2021-03-18 10:04:42
- * @LastEditTime: 2021-03-18 16:22:41
+ * @LastEditTime: 2021-03-18 16:26:38
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \node-jwt-demo\express-based\README.md
@@ -70,7 +70,7 @@ const Sequelize = require('sequelize')
 const config = {
   host: 'localhost',
   username: 'root',
-  password: 'liuchenxi0428',
+  password: 'xxxxxxxx',
   database: 'jwt_demo',
 }
 const sequelize = new Sequelize(config.database, config.username, config.password, {
@@ -183,7 +183,7 @@ router.post('/getUser', function(req, res, next) {
 
 ```javascript
 const jwt = require('jsonwebtoken')
-const signKey = 'liuchenxi0428'
+const signKey = 'express_jwt_key'
 
 // jwt.sign(payload, secretOrPrivateKey, [options, callback])
 function generate(username, userId) {
@@ -253,7 +253,7 @@ app.use(function(req, res, next) {
 //! 验证 Token 是否过期并设置白名单
 app.use(
   expressJwt({
-    secret: 'liuchenxi0428',
+    secret: 'express_jwt_key',
     algorithms: ['HS256'],
   }).unless({
     path: ['/', '/users/', '/users/login'],

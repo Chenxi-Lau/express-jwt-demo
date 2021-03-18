@@ -11,7 +11,7 @@ const Sequelize = require('sequelize')
 const config = {
   host: 'localhost',
   username: 'root',
-  password: 'liuchenxi0428',
+  password: 'xxxxxxxx',
   database: 'jwt_demo'
 }
 // Object-Relational Mapping，把关系数据库的表结构映射到对象上。

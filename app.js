@@ -1,7 +1,7 @@
 /*
  * @Author: 刘晨曦
  * @Date: 2021-03-18 10:04:01
- * @LastEditTime: 2021-03-18 15:25:02
+ * @LastEditTime: 2021-03-18 16:27:04
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \node-jwt-demo\express-based\app.js
@@ -36,7 +36,7 @@ app.use(function (req, res, next) {
 
 //! 验证 Token 是否过期并设置白名单
 app.use(expressJwt({
-  secret: 'liuchenxi0428',
+  secret: 'express_jwt_key',
   algorithms: ['HS256']
 }).unless({
   path: ['/', '/users/', '/users/login']

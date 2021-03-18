@@ -7,7 +7,7 @@
  * @FilePath: \node-jwt-demo\express-based\utils\token.js
  */
 const jwt = require('jsonwebtoken')
-const signKey = 'liuchenxi0428'
+const signKey = 'express_jwt_key'
 
 // jwt.sign(payload, secretOrPrivateKey, [options, callback])
 
