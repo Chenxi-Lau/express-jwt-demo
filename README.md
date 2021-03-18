@@ -9,7 +9,7 @@
 
 # 基于 Express.js 的 JWT 鉴权方案的实践
 
-> 方案：Express.js + Mysql2 + sequelize
+> 方案：Express.js + Mysql2 + Sequelize
 
 > Github 项目地址：https://github.com/Chenxi-Lau/express-jwt-demo
 
